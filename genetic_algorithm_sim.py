@@ -1,6 +1,6 @@
 import numpy
 import numpy as np
-from time import time, strftime
+from time import strftime
 import os
 from pylab import *
 
@@ -78,13 +78,24 @@ def figure_creator(current_array, file_number, timestamp):
     file_number += 1
     return file_number
     
-def newgen(selection, fight, mutate):
+def housekeeping():   
     assert pop_size >= mutation_count, "mutation_count cannot exceed pop_size"
-    timestamp = strftime('%B %d %Y, %H %M')
+    timestamp = strftime('%B %d %Y, %H %M %S')
     os.makedirs("C:\\Users\\Nike\\Desktop\\Graphs\\2D Hist\\%s" %timestamp)
     os.makedirs("C:\\Users\\Nike\\Desktop\\Graphs\\RawData\\%s" %timestamp)
+    f = open("C:\\Users\\Nike\\Desktop\\Graphs\\2D Hist\\%s\\conditions.txt" 
+    %timestamp, 'w') 
+    f.write('Population size = %s\n\
+    Number of mutated individuals per round: %s\n\
+    Resource allocation per round: %s\n\
+    Rounds of Mutation/Crossover: %s' %(pop_size, mutation_count, payoff,
+                                        recomb_mutate_cycles))
+    return timestamp
+    
+def newgen(selection, fight, mutate, housekeeping):
     file_number = 0
     board = np.random.randint(1,1200,(pop_size,200))
+    timestamp = housekeeping()
     current_array = board
     file_number = figure_creator(current_array, file_number, timestamp)
     for i in range(recomb_mutate_cycles):
@@ -104,4 +115,5 @@ def newgen(selection, fight, mutate):
         current_array = board_copy
         file_number = figure_creator(current_array, file_number,timestamp)
     return board_copy
-
+    
+g = newgen(selection, fight, mutate, housekeeping)

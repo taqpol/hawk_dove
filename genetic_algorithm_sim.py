@@ -95,10 +95,10 @@ def figure_creator(current_array, file_number, timestamp):
 def housekeeping():   
     assert pop_size >= mutation_count, "mutation_count cannot exceed pop_size"
     timestamp = strftime('%B %d %Y, %H %M %S')
-    os.makedirs("C:\\Users\\Nike\\Desktop\\Graphs\\2D Hist\\%s" %timestamp)
-    os.makedirs("C:\\Users\\Nike\\Desktop\\Graphs\\RawData\\%s" %timestamp)
-    f = open("C:\\Users\\Nike\\Desktop\\Graphs\\2D Hist\\%s\\conditions.txt" 
-    %timestamp, 'w') 
+    parent_dir = os.path.join(os.path.expanduser("~"), "Desktop\\Graphs\\%s" %timestamp)
+    os.makedirs(os.path.join(parent_dir, "2D Hist"))
+    os.makedirs(os.path.join(parent_dir, "RawData"))
+    f = open("\\%s\\conditions.txt" %timestamp, 'w') 
     f.write('Population size = %s\n\
 Number of mutated individuals per round: %s\n\
 Resource allocation per round: %s\n\

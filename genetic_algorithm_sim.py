@@ -105,11 +105,3 @@ def newgen(selection, fight, mutate):
         file_number = figure_creator(current_array, file_number,timestamp)
     return board_copy
 
-
-then = time()
-f = newgen(selection,fight,mutate)
-hist(f[0,])
-print("Ran in %s seconds" % (time()-then))
-
-timestamp = strftime('%B %d %Y, %H %M')
-os.path.join("C:\\Users\\Nike\\Desktop\\Graphs\\2D Hist\\%s" %timestamp)

@@ -8,12 +8,14 @@ global payoff
 global pop_size
 global mutation_count
 global recomb_mutate_cycles
-pop_size = 200
-payoff = 150
-mutation_count = 50
-recomb_mutate_cycles = 50
+pop_size = 2000
+payoff = 300
+mutation_count = 500
+recomb_mutate_cycles = 500
 
 
+#tabulates the performance of each individual against pop_size/10 random individuals 
+#from the same array
 def fight(board):
     fitness = []
     for row in range(pop_size):
@@ -33,7 +35,9 @@ def fight(board):
     fitness = np.asarray([numpy.mean(fitness_array[x,]) for x in range(pop_size)])
     return fitness
 
-    
+
+#generates a series of weighted probabilities for each chromosome based on how 
+#they did while fighting    
 def selection(fitness):
     fitness1 = fitness + abs(min(fitness))
     combined = sum(fitness1)
@@ -43,6 +47,7 @@ def selection(fitness):
     return selection
 
 
+#takes one value in randomly selected chromosomes and changes it to something else
 def mutate(board_copy):
     selected = np.random.randint(0,pop_size-1, mutation_count)
     for individuals in selected:
@@ -51,6 +56,9 @@ def mutate(board_copy):
     return board_copy
 
 
+#selects a point at random and selects two chromosomes. the beginning of each
+#chromosome to the point, and the end of each chromosome to the point, are recombined
+#to create two novel chromosomes
 def crossover(board_copy):
     recombination_point = np.random.randint(0,199)
     parent1 = np.random.randint(0,pop_size-1)
@@ -65,6 +73,9 @@ def crossover(board_copy):
         chromosome_break_forward1))
     return board_copy
 
+
+#generates a histogram and dumps raw numpy arrays to a time-stamped folder, 
+#numbering each one to prevent file conflicts
 def figure_creator(current_array, file_number, timestamp):
     q = arange(pop_size)
     chromosome_contents = [numpy.mean(current_array[i,]) for i in range(pop_size)]
@@ -78,6 +89,9 @@ def figure_creator(current_array, file_number, timestamp):
     file_number += 1
     return file_number
     
+    
+#creates file paths to store graphs and arrays in, and writes the conditions of
+#each run to a file to compare results between runs    
 def housekeeping():   
     assert pop_size >= mutation_count, "mutation_count cannot exceed pop_size"
     timestamp = strftime('%B %d %Y, %H %M %S')
@@ -86,12 +100,15 @@ def housekeeping():
     f = open("C:\\Users\\Nike\\Desktop\\Graphs\\2D Hist\\%s\\conditions.txt" 
     %timestamp, 'w') 
     f.write('Population size = %s\n\
-    Number of mutated individuals per round: %s\n\
-    Resource allocation per round: %s\n\
-    Rounds of Mutation/Crossover: %s' %(pop_size, mutation_count, payoff,
+Number of mutated individuals per round: %s\n\
+Resource allocation per round: %s\n\
+Rounds of Mutation/Crossover: %s' %(pop_size, mutation_count, payoff,
                                         recomb_mutate_cycles))
     return timestamp
     
+    
+#combined function runs all of the above functions according to parameters
+#set by the globals
 def newgen(selection, fight, mutate, housekeeping):
     file_number = 0
     board = np.random.randint(1,1200,(pop_size,200))

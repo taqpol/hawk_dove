@@ -81,10 +81,13 @@ def figure_creator(current_array, file_number, parent_dir):
     chromosome_contents = [numpy.mean(current_array[i,]) for i in range(pop_size)]
     hist2d(chromosome_contents,q, bins = 60)
     savefig(os.path.join(parent_dir, '2D Hist\\%s.png' %file_number))
-#    hist(chromosome_contents)
-#    savefig(os.path.join(parent_dir, '1D Hist\\%s.png' %file_number)
-#    scatter(chromosome_contents,q)
-#    savefig('os.path.join(parent_dir, 'Scatter\\%s.png' %file_number)
+    pyplot.clf()
+    hist(chromosome_contents)
+    savefig(os.path.join(parent_dir, '1D Hist\\%s.png' %file_number))
+    pyplot.clf()
+    scatter(chromosome_contents,q)
+    savefig(os.path.join(parent_dir, 'Scatter\\%s.png' %file_number))
+    pyplot.clf()
     np.save(os.path.join(parent_dir, 'RawData\\%s.png' %file_number), current_array)
     file_number += 1
     return file_number
@@ -98,6 +101,8 @@ def housekeeping():
     parent_dir = os.path.join(os.path.expanduser("~"), "Desktop\\Graphs\\%s" %timestamp)
     os.makedirs(os.path.join(parent_dir, "2D Hist"))
     os.makedirs(os.path.join(parent_dir, "RawData"))
+    os.makedirs(os.path.join(parent_dir, "Scatter"))
+    os.makedirs(os.path.join(parent_dir, "1D Hist"))
     f = open(os.path.join(parent_dir, "conditions.txt"), 'w') 
     f.write('Population size = %s\n\
 Number of mutated individuals per round: %s\n\
@@ -122,7 +127,7 @@ def newgen(selection, fight, mutate, housekeeping):
         board_copy = mutate(board_copy)
         board_copy = crossover(board_copy)
         current_array = board_copy
-        file_number = figure_creator(current_array, file_number, timestamp)
+        file_number = figure_creator(current_array, file_number, parent_dir)
     while numpy.array_equal(board,board_copy) == False:
         board = board_copy
         fitness = fight(board)
@@ -130,7 +135,7 @@ def newgen(selection, fight, mutate, housekeeping):
         board_copy = board[indices,]
         board_copy = crossover(board_copy)
         current_array = board_copy
-        file_number = figure_creator(current_array, file_number,timestamp)
+        file_number = figure_creator(current_array, file_number, parent_dir)
     return board_copy
     
 g = newgen(selection, fight, mutate, housekeeping)

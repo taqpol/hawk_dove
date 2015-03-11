@@ -76,16 +76,16 @@ def crossover(board_copy):
 
 #generates a histogram and dumps raw numpy arrays to a time-stamped folder, 
 #numbering each one to prevent file conflicts
-def figure_creator(current_array, file_number, timestamp):
+def figure_creator(current_array, file_number, parent_dir):
     q = arange(pop_size)
     chromosome_contents = [numpy.mean(current_array[i,]) for i in range(pop_size)]
     hist2d(chromosome_contents,q, bins = 60)
-    savefig('C:\\Users\\Nike\\Desktop\\Graphs\\2D Hist\\%s\\%s.png' %(timestamp,file_number))
+    savefig(os.path.join(parent_dir, '2D Hist\\%s.png' %file_number))
 #    hist(chromosome_contents)
-#    savefig('C:\\Users\\Nike\\Desktop\\Graphs\\1D Hist\\histogram %s.png' %file_number)
+#    savefig(os.path.join(parent_dir, '1D Hist\\%s.png' %file_number)
 #    scatter(chromosome_contents,q)
-#    savefig('C:\\Users\\Nike\\Desktop\\Graphs\\Scatter\\scatter %s.png' %file_number)
-    np.save('C:\\Users\\Nike\\Desktop\\Graphs\\RawData\\%s\\%s' %(timestamp,file_number), current_array)
+#    savefig('os.path.join(parent_dir, 'Scatter\\%s.png' %file_number)
+    np.save(os.path.join(parent_dir, 'RawData\\%s.png' %file_number), current_array)
     file_number += 1
     return file_number
     
@@ -98,13 +98,13 @@ def housekeeping():
     parent_dir = os.path.join(os.path.expanduser("~"), "Desktop\\Graphs\\%s" %timestamp)
     os.makedirs(os.path.join(parent_dir, "2D Hist"))
     os.makedirs(os.path.join(parent_dir, "RawData"))
-    f = open("\\%s\\conditions.txt" %timestamp, 'w') 
+    f = open(os.path.join(parent_dir, "conditions.txt"), 'w') 
     f.write('Population size = %s\n\
 Number of mutated individuals per round: %s\n\
 Resource allocation per round: %s\n\
 Rounds of Mutation/Crossover: %s' %(pop_size, mutation_count, payoff,
                                         recomb_mutate_cycles))
-    return timestamp
+    return parent_dir
     
     
 #combined function runs all of the above functions according to parameters
@@ -112,9 +112,9 @@ Rounds of Mutation/Crossover: %s' %(pop_size, mutation_count, payoff,
 def newgen(selection, fight, mutate, housekeeping):
     file_number = 0
     board = np.random.randint(1,1200,(pop_size,200))
-    timestamp = housekeeping()
+    parent_dir = housekeeping()
     current_array = board
-    file_number = figure_creator(current_array, file_number, timestamp)
+    file_number = figure_creator(current_array, file_number, parent_dir)
     for i in range(recomb_mutate_cycles):
         fitness = fight(board)
         indices = selection(fitness)

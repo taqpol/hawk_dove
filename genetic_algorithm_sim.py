@@ -9,7 +9,7 @@ global pop_size
 global mutation_count
 global recomb_mutate_cycles
 pop_size = 2000
-payoff = 300
+payoff = 600
 mutation_count = 500
 recomb_mutate_cycles = 500
 
@@ -138,4 +138,4 @@ def newgen(selection, fight, mutate, housekeeping):
         file_number = figure_creator(current_array, file_number, parent_dir)
     return board_copy
     
-g = newgen(selection, fight, mutate, housekeeping)
+newgen(selection, fight, mutate, housekeeping)

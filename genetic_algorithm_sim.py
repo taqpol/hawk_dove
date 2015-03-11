@@ -77,17 +77,6 @@ def crossover(board_copy):
 #generates a histogram and dumps raw numpy arrays to a time-stamped folder, 
 #numbering each one to prevent file conflicts
 def figure_creator(current_array, file_number, parent_dir):
-    q = arange(pop_size)
-    chromosome_contents = [numpy.mean(current_array[i,]) for i in range(pop_size)]
-    hist2d(chromosome_contents,q, bins = 60)
-    savefig(os.path.join(parent_dir, '2D Hist\\%s.png' %file_number))
-    pyplot.clf()
-    hist(chromosome_contents)
-    savefig(os.path.join(parent_dir, '1D Hist\\%s.png' %file_number))
-    pyplot.clf()
-    scatter(chromosome_contents,q)
-    savefig(os.path.join(parent_dir, 'Scatter\\%s.png' %file_number))
-    pyplot.clf()
     np.save(os.path.join(parent_dir, 'RawData\\%s' %file_number), current_array)
     file_number += 1
     return file_number
@@ -99,9 +88,6 @@ def housekeeping():
     assert pop_size >= mutation_count, "mutation_count cannot exceed pop_size"
     timestamp = strftime('%B %d %Y, %H %M %S')
     parent_dir = os.path.join(os.path.expanduser("~"), "Desktop\\Graphs\\%s\\" %timestamp)
-    os.makedirs(os.path.join(parent_dir, '2D Hist'))
-    os.makedirs(os.path.join(parent_dir, '1D Hist'))
-    os.makedirs(os.path.join(parent_dir, 'Scatter'))
     os.makedirs(os.path.join(parent_dir, 'RawData'))
     f = open(os.path.join(parent_dir, "conditions.txt"), 'w') 
     f.write('Population size = %s\n\

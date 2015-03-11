@@ -88,7 +88,7 @@ def figure_creator(current_array, file_number, parent_dir):
     scatter(chromosome_contents,q)
     savefig(os.path.join(parent_dir, 'Scatter\\%s.png' %file_number))
     pyplot.clf()
-    np.save(os.path.join(parent_dir, 'RawData\\%s.png' %file_number), current_array)
+    np.save(os.path.join(parent_dir, 'RawData\\%s' %file_number), current_array)
     file_number += 1
     return file_number
     
@@ -98,11 +98,11 @@ def figure_creator(current_array, file_number, parent_dir):
 def housekeeping():   
     assert pop_size >= mutation_count, "mutation_count cannot exceed pop_size"
     timestamp = strftime('%B %d %Y, %H %M %S')
-    parent_dir = os.path.join(os.path.expanduser("~"), "Desktop\\Graphs\\%s" %timestamp)
-    os.makedirs(os.path.join(parent_dir, "2D Hist"))
-    os.makedirs(os.path.join(parent_dir, "RawData"))
-    os.makedirs(os.path.join(parent_dir, "Scatter"))
-    os.makedirs(os.path.join(parent_dir, "1D Hist"))
+    parent_dir = os.path.join(os.path.expanduser("~"), "Desktop\\Graphs\\%s\\" %timestamp)
+    os.makedirs(os.path.join(parent_dir, '2D Hist'))
+    os.makedirs(os.path.join(parent_dir, '1D Hist'))
+    os.makedirs(os.path.join(parent_dir, 'Scatter'))
+    os.makedirs(os.path.join(parent_dir, 'RawData'))
     f = open(os.path.join(parent_dir, "conditions.txt"), 'w') 
     f.write('Population size = %s\n\
 Number of mutated individuals per round: %s\n\

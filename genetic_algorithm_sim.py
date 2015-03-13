@@ -26,7 +26,7 @@ def fight(board):
             player_2_choice = np.random.randint(0,199)
             one_player_fitness[bouts] = \
             (board[row,player_1_choice] > board[bouts,player_2_choice])*\
-            (pop_size - board[row,player_1_choice]) + \
+            (payoff - board[row,player_1_choice]) + \
             (board[row,player_1_choice] < board[bouts,player_2_choice])*\
             (-board[row,player_1_choice]) + \
             (board[row,player_1_choice] == board[bouts,player_2_choice])*(payoff/2)
@@ -123,5 +123,5 @@ def newgen(selection, fight, mutate, housekeeping):
         current_array = board_copy
         file_number = figure_creator(current_array, file_number, parent_dir)
     return board_copy
-    
+
 newgen(selection, fight, mutate, housekeeping)
